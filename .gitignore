@@ -1,0 +1,17 @@
+.env
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+data/raw/*
+!data/raw/.gitkeep
+data/prepared/*
+!data/prepared/.gitkeep
+results/predictions/*
+!results/predictions/.gitkeep
+results/metrics/*
+!results/metrics/.gitkeep
+results/timings/*
+!results/timings/.gitkeep
