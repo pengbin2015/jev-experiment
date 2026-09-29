@@ -1,0 +1,377 @@
+version: "1.0"
+dataset: "PolyAI/banking77"
+source_revision: "062c492e118a36c10e8c8bf4308fce0f63152d3e"
+
+# Frozen before model evaluation. Changes require a new taxonomy version.
+# split: the former queue divides across V2 destinations.
+# move: the intent is reassigned to a different operational function.
+# unchanged: the queue and its role are retained in V2.
+v1:
+  CARD_SERVICES:
+    description: >
+      Requests about obtaining, activating, configuring, replacing or using
+      a physical or virtual bank card.
+  CARD_PAYMENTS:
+    description: >
+      Card purchases, payment failures, refunds, charges and payment disputes,
+      including the small direct-debit caseload.
+  CASH_WITHDRAWAL:
+    description: >
+      ATM access, cash withdrawals and related problems.
+  TRANSFERS:
+    description: >
+      Sending, receiving and managing bank transfers.
+  TOP_UPS:
+    description: >
+      Adding funds by card, bank transfer, cash or cheque and resolving
+      related problems.
+  ACCOUNT_ACCESS:
+    description: >
+      Account eligibility, access, identity checks, personal details
+      and account administration.
+  CURRENCY:
+    description: >
+      Currency support, conversion, exchange rates and associated charges.
+
+v2:
+  CARD_MANAGEMENT:
+    description: >
+      Physical or virtual card issuance, activation, PINs and general
+      card operation.
+  DIGITAL_PAYMENTS:
+    description: >
+      Card purchases, contactless and mobile payments, payment failures,
+      refunds and related charges.
+  CASH_WITHDRAWAL:
+    description: >
+      ATM access, cash withdrawals and related problems.
+  TRANSFERS:
+    description: >
+      Sending, receiving and managing bank transfers.
+  TOP_UPS:
+    description: >
+      Adding funds and resolving problems associated with topping up.
+  ACCOUNT_SERVICES:
+    description: >
+      Account eligibility, access, personal information and administration.
+  IDENTITY_COMPLIANCE:
+    description: >
+      Identity verification, source-of-funds checks and verification
+      requirements.
+  SECURITY_DISPUTES:
+    description: >
+      Suspected compromise, lost or stolen access devices and unrecognized
+      financial activity.
+  CURRENCY:
+    description: >
+      Currency support, conversion, exchange rates and associated charges.
+
+mapping:
+  activate_my_card:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  age_limit:
+    v1: ACCOUNT_ACCESS
+    v2: ACCOUNT_SERVICES
+    change: split
+  apple_pay_or_google_pay:
+    v1: CARD_SERVICES
+    v2: DIGITAL_PAYMENTS
+    change: split
+  atm_support:
+    v1: CASH_WITHDRAWAL
+    v2: CASH_WITHDRAWAL
+    change: unchanged
+  automatic_top_up:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  balance_not_updated_after_bank_transfer:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  balance_not_updated_after_cheque_or_cash_deposit:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  beneficiary_not_allowed:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  cancel_transfer:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  card_about_to_expire:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  card_acceptance:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  card_arrival:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  card_delivery_estimate:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  card_linking:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  card_not_working:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  card_payment_fee_charged:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  card_payment_not_recognised:
+    v1: CARD_PAYMENTS
+    v2: SECURITY_DISPUTES
+    change: move
+  card_payment_wrong_exchange_rate:
+    v1: CURRENCY
+    v2: CURRENCY
+    change: unchanged
+  card_swallowed:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  cash_withdrawal_charge:
+    v1: CASH_WITHDRAWAL
+    v2: CASH_WITHDRAWAL
+    change: unchanged
+  cash_withdrawal_not_recognised:
+    v1: CASH_WITHDRAWAL
+    v2: SECURITY_DISPUTES
+    change: move
+  change_pin:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  compromised_card:
+    v1: CARD_SERVICES
+    v2: SECURITY_DISPUTES
+    change: move
+  contactless_not_working:
+    v1: CARD_SERVICES
+    v2: DIGITAL_PAYMENTS
+    change: split
+  country_support:
+    v1: ACCOUNT_ACCESS
+    v2: ACCOUNT_SERVICES
+    change: split
+  declined_card_payment:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  declined_cash_withdrawal:
+    v1: CASH_WITHDRAWAL
+    v2: CASH_WITHDRAWAL
+    change: unchanged
+  declined_transfer:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  direct_debit_payment_not_recognised:
+    v1: CARD_PAYMENTS
+    v2: SECURITY_DISPUTES
+    change: move
+  disposable_card_limits:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  edit_personal_details:
+    v1: ACCOUNT_ACCESS
+    v2: ACCOUNT_SERVICES
+    change: split
+  exchange_charge:
+    v1: CURRENCY
+    v2: CURRENCY
+    change: unchanged
+  exchange_rate:
+    v1: CURRENCY
+    v2: CURRENCY
+    change: unchanged
+  exchange_via_app:
+    v1: CURRENCY
+    v2: CURRENCY
+    change: unchanged
+  extra_charge_on_statement:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  failed_transfer:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  fiat_currency_support:
+    v1: CURRENCY
+    v2: CURRENCY
+    change: unchanged
+  get_disposable_virtual_card:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  get_physical_card:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  getting_spare_card:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  getting_virtual_card:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  lost_or_stolen_card:
+    v1: CARD_SERVICES
+    v2: SECURITY_DISPUTES
+    change: move
+  lost_or_stolen_phone:
+    v1: ACCOUNT_ACCESS
+    v2: SECURITY_DISPUTES
+    change: move
+  order_physical_card:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  passcode_forgotten:
+    v1: ACCOUNT_ACCESS
+    v2: ACCOUNT_SERVICES
+    change: split
+  pending_card_payment:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  pending_cash_withdrawal:
+    v1: CASH_WITHDRAWAL
+    v2: CASH_WITHDRAWAL
+    change: unchanged
+  pending_top_up:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  pending_transfer:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  pin_blocked:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  receiving_money:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  Refund_not_showing_up:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  request_refund:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  reverted_card_payment?:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  supported_cards_and_currencies:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  terminate_account:
+    v1: ACCOUNT_ACCESS
+    v2: ACCOUNT_SERVICES
+    change: split
+  top_up_by_bank_transfer_charge:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  top_up_by_card_charge:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  top_up_by_cash_or_cheque:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  top_up_failed:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  top_up_limits:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  top_up_reverted:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  topping_up_by_card:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  transaction_charged_twice:
+    v1: CARD_PAYMENTS
+    v2: DIGITAL_PAYMENTS
+    change: split
+  transfer_fee_charged:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  transfer_into_account:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  transfer_not_received_by_recipient:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  transfer_timing:
+    v1: TRANSFERS
+    v2: TRANSFERS
+    change: unchanged
+  unable_to_verify_identity:
+    v1: ACCOUNT_ACCESS
+    v2: IDENTITY_COMPLIANCE
+    change: split
+  verify_my_identity:
+    v1: ACCOUNT_ACCESS
+    v2: IDENTITY_COMPLIANCE
+    change: split
+  verify_source_of_funds:
+    v1: ACCOUNT_ACCESS
+    v2: IDENTITY_COMPLIANCE
+    change: split
+  verify_top_up:
+    v1: TOP_UPS
+    v2: TOP_UPS
+    change: unchanged
+  virtual_card_not_working:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  visa_or_mastercard:
+    v1: CARD_SERVICES
+    v2: CARD_MANAGEMENT
+    change: split
+  why_verify_identity:
+    v1: ACCOUNT_ACCESS
+    v2: IDENTITY_COMPLIANCE
+    change: split
+  wrong_amount_of_cash_received:
+    v1: CASH_WITHDRAWAL
+    v2: CASH_WITHDRAWAL
+    change: unchanged
+  wrong_exchange_rate_for_cash_withdrawal:
+    v1: CURRENCY
+    v2: CURRENCY
+    change: unchanged
