@@ -1,0 +1,21 @@
+model,model_display,budget,draw,macro_f1,accuracy,source_file
+embedding_lr_v2,Embedding + LR,20,1,0.863309895946782,0.8633333333333333,embedding_lr_v2_b20_d01.json
+embedding_lr_v2,Embedding + LR,20,2,0.8260527172819613,0.8266666666666667,embedding_lr_v2_b20_d02.json
+embedding_lr_v2,Embedding + LR,20,3,0.8336687677609881,0.8366666666666667,embedding_lr_v2_b20_d03.json
+embedding_lr_v2,Embedding + LR,20,4,0.8628302383349518,0.8566666666666667,embedding_lr_v2_b20_d04.json
+embedding_lr_v2,Embedding + LR,20,5,0.8439214096530032,0.8416666666666667,embedding_lr_v2_b20_d05.json
+embedding_lr_v2,Embedding + LR,100,1,0.9171567184980268,0.9166666666666666,embedding_lr_v2_b100_d01.json
+embedding_lr_v2,Embedding + LR,100,2,0.9123922822618208,0.91,embedding_lr_v2_b100_d02.json
+embedding_lr_v2,Embedding + LR,100,3,0.9001844631102642,0.8966666666666666,embedding_lr_v2_b100_d03.json
+embedding_lr_v2,Embedding + LR,100,4,0.8958448075932933,0.895,embedding_lr_v2_b100_d04.json
+embedding_lr_v2,Embedding + LR,100,5,0.9071244262833648,0.9016666666666666,embedding_lr_v2_b100_d05.json
+tfidf_lr_v2,TF-IDF + LR,20,1,0.7114230120853551,0.7216666666666667,tfidf_lr_v2_b20_d01.json
+tfidf_lr_v2,TF-IDF + LR,20,2,0.6843893497902354,0.6816666666666666,tfidf_lr_v2_b20_d02.json
+tfidf_lr_v2,TF-IDF + LR,20,3,0.674709468654001,0.6766666666666666,tfidf_lr_v2_b20_d03.json
+tfidf_lr_v2,TF-IDF + LR,20,4,0.6798158194075817,0.6833333333333333,tfidf_lr_v2_b20_d04.json
+tfidf_lr_v2,TF-IDF + LR,20,5,0.6548640353681754,0.6583333333333333,tfidf_lr_v2_b20_d05.json
+tfidf_lr_v2,TF-IDF + LR,100,1,0.8890955623086594,0.8833333333333333,tfidf_lr_v2_b100_d01.json
+tfidf_lr_v2,TF-IDF + LR,100,2,0.9002779898892308,0.9,tfidf_lr_v2_b100_d02.json
+tfidf_lr_v2,TF-IDF + LR,100,3,0.8836265266911401,0.88,tfidf_lr_v2_b100_d03.json
+tfidf_lr_v2,TF-IDF + LR,100,4,0.8795089355567205,0.8733333333333333,tfidf_lr_v2_b100_d04.json
+tfidf_lr_v2,TF-IDF + LR,100,5,0.879645663561202,0.8816666666666667,tfidf_lr_v2_b100_d05.json

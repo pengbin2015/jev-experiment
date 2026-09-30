@@ -1,0 +1,58 @@
+[
+  {
+    "model": "embedding_lr_v2",
+    "model_display": "Embedding + LR",
+    "budget": 20,
+    "draws": 5,
+    "macro_f1_mean": 0.8459566057955372,
+    "macro_f1_std": 0.016860856435923097,
+    "macro_f1_min": 0.8260527172819613,
+    "macro_f1_max": 0.863309895946782,
+    "accuracy_mean": 0.845,
+    "accuracy_std": 0.014907119849998587,
+    "accuracy_min": 0.8266666666666667,
+    "accuracy_max": 0.8633333333333333
+  },
+  {
+    "model": "embedding_lr_v2",
+    "model_display": "Embedding + LR",
+    "budget": 100,
+    "draws": 5,
+    "macro_f1_mean": 0.906540539549354,
+    "macro_f1_std": 0.008690302954108593,
+    "macro_f1_min": 0.8958448075932933,
+    "macro_f1_max": 0.9171567184980268,
+    "accuracy_mean": 0.9039999999999999,
+    "accuracy_std": 0.009174239296348597,
+    "accuracy_min": 0.895,
+    "accuracy_max": 0.9166666666666666
+  },
+  {
+    "model": "tfidf_lr_v2",
+    "model_display": "TF-IDF + LR",
+    "budget": 20,
+    "draws": 5,
+    "macro_f1_mean": 0.6810403370610697,
+    "macro_f1_std": 0.020378303023560366,
+    "macro_f1_min": 0.6548640353681754,
+    "macro_f1_max": 0.7114230120853551,
+    "accuracy_mean": 0.6843333333333333,
+    "accuracy_std": 0.023112045921265135,
+    "accuracy_min": 0.6583333333333333,
+    "accuracy_max": 0.7216666666666667
+  },
+  {
+    "model": "tfidf_lr_v2",
+    "model_display": "TF-IDF + LR",
+    "budget": 100,
+    "draws": 5,
+    "macro_f1_mean": 0.8864309356013905,
+    "macro_f1_std": 0.008669773044220319,
+    "macro_f1_min": 0.8795089355567205,
+    "macro_f1_max": 0.9002779898892308,
+    "accuracy_mean": 0.8836666666666666,
+    "accuracy_std": 0.009888264649460908,
+    "accuracy_min": 0.8733333333333333,
+    "accuracy_max": 0.9
+  }
+]

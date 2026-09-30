@@ -9,6 +9,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/prepared/*
 !data/prepared/.gitkeep
+data/cache/*
 results/predictions/*
 !results/predictions/.gitkeep
 results/metrics/*
