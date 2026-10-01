@@ -248,3 +248,52 @@ As more V2-labelled data becomes available, the simpler lexical classifier catch
 This contrasts with the V1 result, where TF-IDF slightly outperformed the embedding classifier.
 
 The emerging interpretation is therefore not that embeddings are universally superior, but that they are more label-efficient during taxonomy adaptation.
+
+## Zero-Shot SLM Baseline
+
+A Qwen3-4B-Instruct-2507 Q4_K_M model was tested against the V2 taxonomy using Ollama.
+
+The model received:
+
+- the raw customer message;
+- the nine frozen V2 class definitions;
+- no BANKING77 intent;
+- no V1 label;
+- no V2 training examples.
+
+The model therefore used **zero new V2 labels**.
+
+### Results
+
+| Metric          |     Result |
+| --------------- | ---------: |
+| Macro-F1        |     0.7749 |
+| Accuracy        |     0.7767 |
+| Invalid outputs |    0 / 600 |
+| Mean latency    | 1290.82 ms |
+| p50 latency     | 1214.45 ms |
+| p95 latency     | 1848.34 ms |
+
+### Comparison with adapted ML
+
+| Method             | New V2 labels | Macro-F1 |
+| ------------------ | ------------: | -------: |
+| TF-IDF + LR        |           120 |   0.6810 |
+| Qwen3-4B zero-shot |             0 |   0.7749 |
+| Embedding + LR     |           120 |   0.8460 |
+| TF-IDF + LR        |           600 |   0.8864 |
+| Embedding + LR     |           600 |   0.9065 |
+
+The SLM outperformed TF-IDF trained with 20 labels per affected class despite using no new V2 labels. However, it remained below the embedding classifier trained with the same 20-label budget.
+
+The result suggests that a small language model can provide immediate adaptability when the taxonomy changes, but there is a quality and latency cost compared with supervised adaptation.
+
+### Per-class observation
+
+The SLM performed particularly well on IDENTITY_COMPLIANCE and CARD_MANAGEMENT.
+
+The weakest areas were DIGITAL_PAYMENTS and SECURITY_DISPUTES.
+
+SECURITY_DISPUTES had high recall but low precision, suggesting the model tended to over-route suspicious or ambiguous requests into the security category.
+
+This is an important distinction between semantic understanding and a well-calibrated business decision boundary.

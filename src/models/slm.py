@@ -1,1 +1,0 @@
-"""Small language model baseline."""

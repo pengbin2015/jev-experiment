@@ -16,3 +16,4 @@ results/metrics/*
 !results/metrics/.gitkeep
 results/timings/*
 !results/timings/.gitkeep
+results/raw/*

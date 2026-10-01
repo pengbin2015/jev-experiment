@@ -1,0 +1,44 @@
+version: "1.0"
+
+classes:
+  CARD_MANAGEMENT:
+    description: >
+      Physical or virtual card issuance, activation, PINs and
+      general card operation.
+
+  DIGITAL_PAYMENTS:
+    description: >
+      Card purchases, contactless and mobile payments, payment
+      failures, refunds and related charges.
+
+  CASH_WITHDRAWAL:
+    description: >
+      ATM access, cash withdrawals and related problems.
+
+  TRANSFERS:
+    description: >
+      Sending, receiving and managing bank transfers.
+
+  TOP_UPS:
+    description: >
+      Adding funds and resolving problems associated with topping up.
+
+  ACCOUNT_SERVICES:
+    description: >
+      Account eligibility, access, personal information and
+      administration.
+
+  IDENTITY_COMPLIANCE:
+    description: >
+      Identity verification, source-of-funds checks and verification
+      requirements.
+
+  SECURITY_DISPUTES:
+    description: >
+      Suspected compromise, lost or stolen access devices and
+      unrecognized financial activity.
+
+  CURRENCY:
+    description: >
+      Currency support, conversion, exchange rates and associated
+      charges.
