@@ -297,3 +297,228 @@ The weakest areas were DIGITAL_PAYMENTS and SECURITY_DISPUTES.
 SECURITY_DISPUTES had high recall but low precision, suggesting the model tended to over-route suspicious or ambiguous requests into the security category.
 
 This is an important distinction between semantic understanding and a well-calibrated business decision boundary.
+
+## Zero-Shot Jev Results
+
+### Experiment setup
+
+Jev was evaluated against exactly the same frozen V2 benchmark used for the zero-shot SLM experiment:
+
+- 600 frozen BANKING77 test messages
+- 9 V2 business classes
+- identical V2 class definitions
+- no BANKING77 original intent exposed to the model
+- no V1 label exposed to the model
+- no V2 training examples
+- no few-shot demonstrations
+- zero new V2 labels
+
+The requested API model was:
+
+`jev-latest`
+
+The TypeSafe API reported the actual serving model as:
+
+`jev-1.13.0`
+
+Unlike the SLM, Jev returned a native typed choice together with a probability distribution and a separate confidence value. No free-text output parsing was required.
+
+---
+
+### Jev classification results
+
+| Metric                               |    Result |
+| ------------------------------------ | --------: |
+| Macro-F1                             |    0.8954 |
+| Accuracy                             |    0.8900 |
+| New V2 labels                        |         0 |
+| Test examples                        |       600 |
+| Mean latency                         | 723.01 ms |
+| p50 latency                          | 684.89 ms |
+| p95 latency                          | 992.44 ms |
+| Input tokens                         |   325,972 |
+| Total API cost                       | $0.013691 |
+| Approx. cost / 1,000 classifications |   $0.0228 |
+
+Per-class results:
+
+| V2 class            | Precision | Recall |     F1 |
+| ------------------- | --------: | -----: | -----: |
+| ACCOUNT_SERVICES    |    0.8085 | 0.9500 | 0.8736 |
+| CARD_MANAGEMENT     |    0.9338 | 0.9407 | 0.9373 |
+| CASH_WITHDRAWAL     |    0.8696 | 1.0000 | 0.9302 |
+| CURRENCY            |    0.8980 | 0.9565 | 0.9263 |
+| DIGITAL_PAYMENTS    |    0.8451 | 0.7692 | 0.8054 |
+| IDENTITY_COMPLIANCE |    1.0000 | 0.9750 | 0.9873 |
+| SECURITY_DISPUTES   |    0.9524 | 0.8511 | 0.8989 |
+| TOP_UPS             |    0.8333 | 0.8242 | 0.8287 |
+| TRANSFERS           |    0.8875 | 0.8554 | 0.8712 |
+
+No V2 class collapsed. The weakest class was DIGITAL_PAYMENTS at 0.8054 F1, while IDENTITY_COMPLIANCE reached 0.9873.
+
+---
+
+## V2 Comparison So Far
+
+| Method             | New V2 labels |   Macro-F1 |   Accuracy |
+| ------------------ | ------------: | ---------: | ---------: |
+| TF-IDF + LR        |           120 |     0.6810 |     0.6843 |
+| Qwen3-4B zero-shot |             0 |     0.7749 |     0.7767 |
+| Embedding + LR     |           120 |     0.8460 |     0.8450 |
+| **Jev zero-shot**  |         **0** | **0.8954** | **0.8900** |
+| TF-IDF + LR        |           600 |     0.8864 |     0.8837 |
+| Embedding + LR     |           600 |     0.9065 |     0.9040 |
+
+### Main observation
+
+Jev achieved 0.8954 Macro-F1 without receiving any newly labelled V2 examples.
+
+This was:
+
+- 0.1205 higher than Qwen3-4B zero-shot;
+- 0.0494 higher than Embedding + LR with 120 new labels;
+- 0.0090 higher than TF-IDF + LR with 600 new labels;
+- 0.0111 lower than Embedding + LR with 600 new labels.
+
+The result therefore does not suggest that Jev universally replaces supervised classifiers.
+
+Instead, Jev appears particularly strong in the period immediately after a decision taxonomy changes, before an organisation has collected enough new labels to retrain a task-specific classifier.
+
+A semantic embedding classifier eventually achieved slightly higher quality once 600 new V2 labels were available.
+
+---
+
+## Zero-Shot SLM vs Jev
+
+Both systems received:
+
+- the same customer messages;
+- the same frozen V2 class definitions;
+- zero new V2 labels.
+
+| Model                         |   Macro-F1 |   Accuracy |   p50 latency |
+| ----------------------------- | ---------: | ---------: | ------------: |
+| Qwen3-4B-Instruct-2507 Q4_K_M |     0.7749 |     0.7767 |    1214.45 ms |
+| Jev (`jev-1.13.0`)            | **0.8954** | **0.8900** | **684.89 ms** |
+
+Jev exceeded the Qwen3-4B baseline by 0.1205 Macro-F1.
+
+A particularly important difference appeared in SECURITY_DISPUTES.
+
+Qwen3-4B:
+
+- precision: 0.4300
+- recall: 0.9149
+- F1: 0.5850
+
+Jev:
+
+- precision: 0.9524
+- recall: 0.8511
+- F1: 0.8989
+
+Qwen tended to route too many suspicious or ambiguous messages into SECURITY_DISPUTES. Jev produced a substantially more precise decision boundary.
+
+Latency must be interpreted cautiously. Qwen was run locally on the test laptop while Jev was accessed through a hosted API. The observed end-to-end latency therefore reflects the tested deployment configurations, not an intrinsic architectural speed comparison.
+
+---
+
+# Jev Probability and Confidence Analysis
+
+Jev returns two distinct uncertainty-related outputs:
+
+1. a probability distribution across the available choices;
+2. a separate API `confidence` score.
+
+These should not be treated as the same quantity.
+
+Across the 600 examples, the maximum observed difference between API confidence and the raw selected-class probability was 0.09.
+
+The returned probability vectors also summed approximately, rather than exactly, to 1.0. They were therefore normalized before calculating multiclass Brier score and log loss.
+
+---
+
+## Probability Calibration
+
+| Metric                          |  Result |
+| ------------------------------- | ------: |
+| Accuracy                        |  0.8900 |
+| Mean selected-class probability |  0.9443 |
+| Probability − accuracy gap      | +0.0543 |
+| ECE                             |  0.0585 |
+| MCE                             |  0.1345 |
+| Top-label Brier score           |  0.0856 |
+| Multiclass Brier score          |  0.1815 |
+| Multiclass log loss             |  1.3615 |
+
+The mean selected-class probability was 94.43%, while actual accuracy was 89.00%.
+
+This suggests that Jev was **somewhat overconfident on this benchmark**.
+
+The fixed-bin Expected Calibration Error was 0.0585, meaning predicted probability differed from observed accuracy by approximately 5.9 percentage points on average across the bins, weighted by the number of predictions in each bin.
+
+The largest group contained 499 of the 600 examples:
+
+| Selected probability band | Cases | Mean probability | Actual accuracy |
+| ------------------------- | ----: | ---------------: | --------------: |
+| 0.90–1.00                 |   499 |           0.9887 |          0.9399 |
+
+For these predictions, Jev assigned an average selected-class probability of almost 99%, while observed accuracy was about 94%.
+
+The probabilities therefore contain useful uncertainty information, but they should not be interpreted as perfectly calibrated probabilities on this dataset.
+
+---
+
+## Jev API Confidence as a Risk Signal
+
+The separate Jev API confidence field was analysed as a ranking signal rather than as a literal probability of correctness.
+
+| Confidence group | Cases | Mean confidence | Accuracy | Error rate |
+| ---------------- | ----: | --------------: | -------: | ---------: |
+| Lowest           |    63 |          0.5943 |   0.5873 |     0.4127 |
+| 2                |    63 |          0.8643 |   0.7460 |     0.2540 |
+| 3                |    67 |          0.9488 |   0.8955 |     0.1045 |
+| 4                |    64 |          0.9861 |   0.8750 |     0.1250 |
+| Highest          |   343 |          1.0000 |   0.9738 |     0.0262 |
+
+The relationship is not perfectly monotonic, but the broad pattern is strong:
+
+- low-confidence decisions have much higher error rates;
+- high-confidence decisions are substantially more reliable.
+
+The 343 cases with API confidence 1.0 achieved 97.38% accuracy.
+
+This also demonstrates that `confidence = 1.0` should not be interpreted as a literal 100% probability of being correct.
+
+---
+
+## Human-Review Simulation
+
+Jev made 66 errors among the 600 test examples.
+
+The examples were ranked from lowest to highest API confidence to simulate sending uncertain decisions to human review.
+
+| Lowest-confidence cases reviewed | Requests reviewed | Errors caught | Share of all errors caught |
+| -------------------------------- | ----------------: | ------------: | -------------------------: |
+| 10%                              |                60 |            24 |                      36.4% |
+| 20%                              |               120 |            39 |                  **59.1%** |
+| 30%                              |               180 |            48 |                  **72.7%** |
+
+### Operational observation
+
+Reviewing only the lowest-confidence 20% of Jev decisions would have surfaced 59.1% of all Jev errors in this experiment.
+
+This may be more operationally useful than treating the confidence value as an exact probability.
+
+It suggests a possible deployment pattern:
+
+```text
+customer request
+      ↓
+     Jev
+      ↓
+decision + confidence
+      │
+      ├── high confidence → automated processing
+      │
+      └── lower confidence → human review

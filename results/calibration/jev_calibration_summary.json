@@ -1,0 +1,59 @@
+{
+  "examples": 600,
+  "correct": 534,
+  "errors": 66,
+  "accuracy": 0.89,
+  "probability_diagnostics": {
+    "max_raw_probability_sum_error": 0.009999999999999898,
+    "max_normalized_probability_sum_error": 2.220446049250313e-16,
+    "max_api_confidence_raw_probability_difference": 0.09000000000000002
+  },
+  "probability_calibration": {
+    "mean_selected_probability": 0.9442949494949494,
+    "probability_minus_accuracy": 0.054294949494949396,
+    "ece": 0.05852828282828279,
+    "mce": 0.13452569169960493,
+    "top_label_brier": 0.08562225925925925,
+    "multiclass_brier": 0.1815105976601027,
+    "multiclass_log_loss": 1.361532243816866,
+    "ece_bins": 10
+  },
+  "api_confidence": {
+    "mean": 0.93595,
+    "min": 0.25,
+    "max": 1.0,
+    "quantile_groups": 5
+  },
+  "review_simulation": [
+    {
+      "review_fraction": 0.1,
+      "review_percentage": 10.0,
+      "reviewed_cases": 60,
+      "total_errors": 66,
+      "errors_caught": 24,
+      "error_capture_rate": 0.36363636363636365,
+      "reviewed_error_rate": 0.4,
+      "max_confidence_reviewed": 0.79
+    },
+    {
+      "review_fraction": 0.2,
+      "review_percentage": 20.0,
+      "reviewed_cases": 120,
+      "total_errors": 66,
+      "errors_caught": 39,
+      "error_capture_rate": 0.5909090909090909,
+      "reviewed_error_rate": 0.32499999999999996,
+      "max_confidence_reviewed": 0.91
+    },
+    {
+      "review_fraction": 0.3,
+      "review_percentage": 30.0,
+      "reviewed_cases": 180,
+      "total_errors": 66,
+      "errors_caught": 48,
+      "error_capture_rate": 0.7272727272727273,
+      "reviewed_error_rate": 0.2666666666666667,
+      "max_confidence_reviewed": 0.97
+    }
+  ]
+}
